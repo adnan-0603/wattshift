@@ -1,0 +1,6 @@
+export type Interval={start:string;end:string;price:number;carbon:number|null};
+export type Outcome={start_slot:number;end_slot:number;cost_eur:number;carbon_kg:number|null};
+export type Job={id:string;release_slot:number;deadline_slot:number;duration_hours:number;gpus:number;assumed_kw:number;policies:Record<string,Outcome|null>};
+export type Total={jobs:number;unavailable_jobs:number;cost_eur:number|null;saving_eur:number|null;saving_pct:number|null;carbon_kg:number|null;carbon_saving_kg:number|null};
+export type Snapshot={schema_version:number;mode:string;source:string;source_url:string;retrieved_at:string;built_at:string;prices:Interval[];forecast:{start:string;p10:number|null;p50:number|null;p90:number|null;published:number|null;carbon_proxy?:number|null}[];forecast_meta:{model:string;issue_time:string;training_rows:number;interval?:string};backtest:{origin:string;holdout_end:string;model_mae_eur_mwh:number;baseline_mae_eur_mwh:number;p10_p90_coverage:number|null;rows:number};simulation:{mode:string;seed:number;requested_jobs:number;totals:Record<string,Total>;jobs:Job[];regret_eur_vs_hindsight:number;assumptions:string};carbon_note:string;seasons:Record<string,string>};
+export type LiveJobs={controller_connected:boolean;updated_at?:string;jobs:{id:string;status:string;reason:string;deadline:string|null;cpu_emulation:boolean}[]};

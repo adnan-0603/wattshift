@@ -1,0 +1,1 @@
+01-understand-energy.ipynb explains source data, units, carbon boundaries and policy comparison. Run from repository root or this directory with dependencies installed. Original university notebooks remain unchanged in ../legacy/wattshift-prototype.zip.

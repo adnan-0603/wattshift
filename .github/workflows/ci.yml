@@ -1,0 +1,21 @@
+name: Verify source
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24', cache: npm, cache-dependency-path: apps/console/package-lock.json}
+      - run: pip install -r requirements.lock.txt pytest
+      - run: mkdir -p data/processed && cp apps/console/public/data/console.json data/processed/console.json
+      - run: python -m pytest -q
+      - run: python scripts/validate.py
+      - run: npm ci && npm test && npm run test:ui && npm run build
+        working-directory: apps/console
+      - run: docker build -t wattshift/backend:1.0.0-rc4 .
+      - run: docker build -t wattshift/console:1.0.0-rc4 apps/console

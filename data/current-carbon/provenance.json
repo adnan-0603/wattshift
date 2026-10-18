@@ -1,0 +1,19 @@
+{
+  "source": "SMARD / Bundesnetzagentur",
+  "source_url": "https://www.smard.de",
+  "adapter_url": "https://www.smard.de/app/chart_data",
+  "license_url": "https://www.smard.de/home/downloadcenter/download-marktdaten/",
+  "retrieved_at": "2026-10-16T22:42:53.664082+00:00",
+  "requested_start": "2026-10-15",
+  "requested_end": "2026-10-18",
+  "actual_start": "2026-10-15T00:00:00+00:00",
+  "actual_end": "2026-10-17T22:00:00+00:00",
+  "resolution": "quarterhour",
+  "price_unit": "EUR/MWh",
+  "generation_unit": "MWh per source interval",
+  "rows": 280,
+  "carbon_rows": 184,
+  "publication_times": "not supplied by this endpoint; retrospective retrieval must not be treated as archived issue-time truth",
+  "carbon_method": "config/emissions.json; retrospective domestic lifecycle proxy; not a live carbon forecast",
+  "sha256": "c5cb99d66b6d2df9ea70f49f51f3e2a23f3c8a94708767263cbe67aa214c9ca8"
+}

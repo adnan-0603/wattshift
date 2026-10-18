@@ -1,0 +1,1718 @@
+{
+  "backtest": {
+    "origin": "2024-12-25T00:00:00+00:00",
+    "holdout_end": "2025-01-01T00:00:00+00:00",
+    "rows": 168,
+    "model_mae_eur_mwh": 27.069907340526964,
+    "baseline_mae_eur_mwh": 58.44821428571428,
+    "p10_p90_coverage": 0.8035714285714286,
+    "pinball": {
+      "0.1": 7.618993360305201,
+      "0.5": 13.534953670263482,
+      "0.9": 7.2165990837557805
+    },
+    "limitation": "One final seven-day holdout; not exhaustive rolling-origin validation or tuned production accuracy",
+    "model": "LightGBM quantile",
+    "issue_time": "2024-12-25T00:00:00+00:00",
+    "training_rows": 7944,
+    "features": [
+      "hour_sin",
+      "hour_cos",
+      "weekday",
+      "month",
+      "weekend",
+      "lag_14d",
+      "lag_21d",
+      "lag_28d"
+    ],
+    "quantiles": [
+      0.1,
+      0.5,
+      0.9
+    ],
+    "interval": "uncalibrated P10\u2013P90; empirical coverage reported separately"
+  },
+  "simulation": {
+    "mode": "retrospective simulation",
+    "seed": 42,
+    "requested_jobs": 48,
+    "totals": {
+      "immediate": {
+        "jobs": 48,
+        "unavailable_jobs": 0,
+        "cost_eur": 27.86877,
+        "baseline_cost_eur": 27.86877,
+        "saving_eur": 0.0,
+        "saving_pct": 0.0,
+        "carbon_kg": 116.54991870598448,
+        "carbon_saving_kg": 0.0
+      },
+      "cheapest": {
+        "jobs": 48,
+        "unavailable_jobs": 0,
+        "cost_eur": 25.699645200000003,
+        "baseline_cost_eur": 27.86877,
+        "saving_eur": 2.1691247999999987,
+        "saving_pct": 7.783353194274446,
+        "carbon_kg": 116.32729158369837,
+        "carbon_saving_kg": 0.22262712228611292
+      },
+      "greenest": {
+        "jobs": 48,
+        "unavailable_jobs": 0,
+        "cost_eur": 26.5592964,
+        "baseline_cost_eur": 27.86877,
+        "saving_eur": 1.3094736000000005,
+        "saving_pct": 4.6987132908987395,
+        "carbon_kg": 116.87455395841167,
+        "carbon_saving_kg": -0.3246352524271856
+      },
+      "oracle": {
+        "jobs": 48,
+        "unavailable_jobs": 0,
+        "cost_eur": 25.2580596,
+        "baseline_cost_eur": 27.86877,
+        "saving_eur": 2.610710400000002,
+        "saving_pct": 9.3678709178769,
+        "carbon_kg": 115.23024206467615,
+        "carbon_saving_kg": 1.3196766413083338
+      }
+    },
+    "jobs": [
+      {
+        "id": "batch-001",
+        "release_slot": 112,
+        "deadline_slot": 125,
+        "duration_hours": 1,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 112,
+            "end_slot": 113,
+            "cost_eur": 0.10247999999999999,
+            "carbon_kg": 0.31044584267122605
+          },
+          "cheapest": {
+            "start_slot": 122,
+            "end_slot": 123,
+            "cost_eur": 0.05430600000000001,
+            "carbon_kg": 0.2717029926027868
+          },
+          "greenest": {
+            "start_slot": 120,
+            "end_slot": 121,
+            "cost_eur": 0.057623999999999995,
+            "carbon_kg": 0.26454309543295973
+          },
+          "oracle": {
+            "start_slot": 122,
+            "end_slot": 123,
+            "cost_eur": 0.05430600000000001,
+            "carbon_kg": 0.2717029926027868
+          }
+        }
+      },
+      {
+        "id": "batch-002",
+        "release_slot": 124,
+        "deadline_slot": 126,
+        "duration_hours": 2,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 124,
+            "end_slot": 126,
+            "cost_eur": 0.2188836,
+            "carbon_kg": 1.0089693547248428
+          },
+          "cheapest": {
+            "start_slot": 124,
+            "end_slot": 126,
+            "cost_eur": 0.2188836,
+            "carbon_kg": 1.0089693547248428
+          },
+          "greenest": {
+            "start_slot": 124,
+            "end_slot": 126,
+            "cost_eur": 0.2188836,
+            "carbon_kg": 1.0089693547248428
+          },
+          "oracle": {
+            "start_slot": 124,
+            "end_slot": 126,
+            "cost_eur": 0.2188836,
+            "carbon_kg": 1.0089693547248428
+          }
+        }
+      },
+      {
+        "id": "batch-003",
+        "release_slot": 13,
+        "deadline_slot": 22,
+        "duration_hours": 1,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 13,
+            "end_slot": 14,
+            "cost_eur": 0.29751,
+            "carbon_kg": 1.2953688620965176
+          },
+          "cheapest": {
+            "start_slot": 21,
+            "end_slot": 22,
+            "cost_eur": 0.34220999999999996,
+            "carbon_kg": 1.4749656782693898
+          },
+          "greenest": {
+            "start_slot": 20,
+            "end_slot": 21,
+            "cost_eur": 0.33903000000000005,
+            "carbon_kg": 1.4463569332004533
+          },
+          "oracle": {
+            "start_slot": 13,
+            "end_slot": 14,
+            "cost_eur": 0.29751,
+            "carbon_kg": 1.2953688620965176
+          }
+        }
+      },
+      {
+        "id": "batch-004",
+        "release_slot": 110,
+        "deadline_slot": 126,
+        "duration_hours": 4,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 110,
+            "end_slot": 114,
+            "cost_eur": 1.42155,
+            "carbon_kg": 4.47449250452623
+          },
+          "cheapest": {
+            "start_slot": 121,
+            "end_slot": 125,
+            "cost_eur": 0.80793,
+            "carbon_kg": 3.86184603574544
+          },
+          "greenest": {
+            "start_slot": 119,
+            "end_slot": 123,
+            "cost_eur": 0.82074,
+            "carbon_kg": 3.845111591480699
+          },
+          "oracle": {
+            "start_slot": 120,
+            "end_slot": 124,
+            "cost_eur": 0.80622,
+            "carbon_kg": 3.84171624450302
+          }
+        }
+      },
+      {
+        "id": "batch-005",
+        "release_slot": 18,
+        "deadline_slot": 40,
+        "duration_hours": 4,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 18,
+            "end_slot": 22,
+            "cost_eur": 0.38927280000000003,
+            "carbon_kg": 1.6124284985364772
+          },
+          "cheapest": {
+            "start_slot": 24,
+            "end_slot": 28,
+            "cost_eur": 0.3109512,
+            "carbon_kg": 1.7234580349254884
+          },
+          "greenest": {
+            "start_slot": 27,
+            "end_slot": 31,
+            "cost_eur": 0.3339672000000001,
+            "carbon_kg": 1.7527837170642502
+          },
+          "oracle": {
+            "start_slot": 24,
+            "end_slot": 28,
+            "cost_eur": 0.3109512,
+            "carbon_kg": 1.7234580349254884
+          }
+        }
+      },
+      {
+        "id": "batch-006",
+        "release_slot": 53,
+        "deadline_slot": 57,
+        "duration_hours": 4,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 53,
+            "end_slot": 57,
+            "cost_eur": 1.50597,
+            "carbon_kg": 6.472583554206258
+          },
+          "cheapest": {
+            "start_slot": 53,
+            "end_slot": 57,
+            "cost_eur": 1.50597,
+            "carbon_kg": 6.472583554206258
+          },
+          "greenest": {
+            "start_slot": 53,
+            "end_slot": 57,
+            "cost_eur": 1.50597,
+            "carbon_kg": 6.472583554206258
+          },
+          "oracle": {
+            "start_slot": 53,
+            "end_slot": 57,
+            "cost_eur": 1.50597,
+            "carbon_kg": 6.472583554206258
+          }
+        }
+      },
+      {
+        "id": "batch-007",
+        "release_slot": 93,
+        "deadline_slot": 107,
+        "duration_hours": 6,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 93,
+            "end_slot": 99,
+            "cost_eur": 2.06121,
+            "carbon_kg": 8.792299211729842
+          },
+          "cheapest": {
+            "start_slot": 96,
+            "end_slot": 102,
+            "cost_eur": 1.854,
+            "carbon_kg": 8.339634113789515
+          },
+          "greenest": {
+            "start_slot": 93,
+            "end_slot": 99,
+            "cost_eur": 2.06121,
+            "carbon_kg": 8.792299211729842
+          },
+          "oracle": {
+            "start_slot": 97,
+            "end_slot": 103,
+            "cost_eur": 1.818,
+            "carbon_kg": 8.262740400014502
+          }
+        }
+      },
+      {
+        "id": "batch-008",
+        "release_slot": 64,
+        "deadline_slot": 76,
+        "duration_hours": 4,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 64,
+            "end_slot": 68,
+            "cost_eur": 0.28308959999999994,
+            "carbon_kg": 1.1049441983301458
+          },
+          "cheapest": {
+            "start_slot": 72,
+            "end_slot": 76,
+            "cost_eur": 0.2091024,
+            "carbon_kg": 1.1396909903339016
+          },
+          "greenest": {
+            "start_slot": 72,
+            "end_slot": 76,
+            "cost_eur": 0.2091024,
+            "carbon_kg": 1.1396909903339016
+          },
+          "oracle": {
+            "start_slot": 72,
+            "end_slot": 76,
+            "cost_eur": 0.2091024,
+            "carbon_kg": 1.1396909903339016
+          }
+        }
+      },
+      {
+        "id": "batch-009",
+        "release_slot": 80,
+        "deadline_slot": 99,
+        "duration_hours": 1,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 80,
+            "end_slot": 81,
+            "cost_eur": 0.061584,
+            "carbon_kg": 0.2539960667594886
+          },
+          "cheapest": {
+            "start_slot": 96,
+            "end_slot": 97,
+            "cost_eur": 0.0547632,
+            "carbon_kg": 0.2306196734709179
+          },
+          "greenest": {
+            "start_slot": 92,
+            "end_slot": 93,
+            "cost_eur": 0.060432,
+            "carbon_kg": 0.24837072323603118
+          },
+          "oracle": {
+            "start_slot": 98,
+            "end_slot": 99,
+            "cost_eur": 0.048816000000000005,
+            "carbon_kg": 0.22335160475145646
+          }
+        }
+      },
+      {
+        "id": "batch-010",
+        "release_slot": 120,
+        "deadline_slot": 130,
+        "duration_hours": 6,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 120,
+            "end_slot": 126,
+            "cost_eur": 0.6381180000000001,
+            "carbon_kg": 3.0066618018664135
+          },
+          "cheapest": {
+            "start_slot": 120,
+            "end_slot": 126,
+            "cost_eur": 0.6381180000000001,
+            "carbon_kg": 3.0066618018664135
+          },
+          "greenest": {
+            "start_slot": 120,
+            "end_slot": 126,
+            "cost_eur": 0.6381180000000001,
+            "carbon_kg": 3.0066618018664135
+          },
+          "oracle": {
+            "start_slot": 120,
+            "end_slot": 126,
+            "cost_eur": 0.6381180000000001,
+            "carbon_kg": 3.0066618018664135
+          }
+        }
+      },
+      {
+        "id": "batch-011",
+        "release_slot": 109,
+        "deadline_slot": 122,
+        "duration_hours": 1,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 109,
+            "end_slot": 110,
+            "cost_eur": 0.0826896,
+            "carbon_kg": 0.3097416199162897
+          },
+          "cheapest": {
+            "start_slot": 121,
+            "end_slot": 122,
+            "cost_eur": 0.057623999999999995,
+            "carbon_kg": 0.26650624995711686
+          },
+          "greenest": {
+            "start_slot": 120,
+            "end_slot": 121,
+            "cost_eur": 0.057623999999999995,
+            "carbon_kg": 0.26454309543295973
+          },
+          "oracle": {
+            "start_slot": 120,
+            "end_slot": 121,
+            "cost_eur": 0.057623999999999995,
+            "carbon_kg": 0.26454309543295973
+          }
+        }
+      },
+      {
+        "id": "batch-012",
+        "release_slot": 140,
+        "deadline_slot": 149,
+        "duration_hours": 1,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 140,
+            "end_slot": 141,
+            "cost_eur": 0.20406,
+            "carbon_kg": 0.9705076186856472
+          },
+          "cheapest": {
+            "start_slot": 146,
+            "end_slot": 147,
+            "cost_eur": 0.17118,
+            "carbon_kg": 1.0541697890277941
+          },
+          "greenest": {
+            "start_slot": 140,
+            "end_slot": 141,
+            "cost_eur": 0.20406,
+            "carbon_kg": 0.9705076186856472
+          },
+          "oracle": {
+            "start_slot": 142,
+            "end_slot": 143,
+            "cost_eur": 0.10697999999999999,
+            "carbon_kg": 1.0124500596877437
+          }
+        }
+      },
+      {
+        "id": "batch-013",
+        "release_slot": 112,
+        "deadline_slot": 128,
+        "duration_hours": 4,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 112,
+            "end_slot": 116,
+            "cost_eur": 0.23009760000000004,
+            "carbon_kg": 0.710069274808403
+          },
+          "cheapest": {
+            "start_slot": 121,
+            "end_slot": 125,
+            "cost_eur": 0.1292688,
+            "carbon_kg": 0.6178953657192703
+          },
+          "greenest": {
+            "start_slot": 119,
+            "end_slot": 123,
+            "cost_eur": 0.1313184,
+            "carbon_kg": 0.6152178546369117
+          },
+          "oracle": {
+            "start_slot": 120,
+            "end_slot": 124,
+            "cost_eur": 0.1289952,
+            "carbon_kg": 0.6146745991204831
+          }
+        }
+      },
+      {
+        "id": "batch-014",
+        "release_slot": 67,
+        "deadline_slot": 77,
+        "duration_hours": 2,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 67,
+            "end_slot": 69,
+            "cost_eur": 0.1241088,
+            "carbon_kg": 0.555277705177057
+          },
+          "cheapest": {
+            "start_slot": 75,
+            "end_slot": 77,
+            "cost_eur": 0.10008479999999999,
+            "carbon_kg": 0.5707248426548092
+          },
+          "greenest": {
+            "start_slot": 75,
+            "end_slot": 77,
+            "cost_eur": 0.10008479999999999,
+            "carbon_kg": 0.5707248426548092
+          },
+          "oracle": {
+            "start_slot": 75,
+            "end_slot": 77,
+            "cost_eur": 0.10008479999999999,
+            "carbon_kg": 0.5707248426548092
+          }
+        }
+      },
+      {
+        "id": "batch-015",
+        "release_slot": 22,
+        "deadline_slot": 38,
+        "duration_hours": 4,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 22,
+            "end_slot": 26,
+            "cost_eur": 0.6184932000000001,
+            "carbon_kg": 3.1685085870601486
+          },
+          "cheapest": {
+            "start_slot": 24,
+            "end_slot": 28,
+            "cost_eur": 0.5774808,
+            "carbon_kg": 3.2007077791473355
+          },
+          "greenest": {
+            "start_slot": 27,
+            "end_slot": 31,
+            "cost_eur": 0.6202248,
+            "carbon_kg": 3.255169760262179
+          },
+          "oracle": {
+            "start_slot": 24,
+            "end_slot": 28,
+            "cost_eur": 0.5774808,
+            "carbon_kg": 3.2007077791473355
+          }
+        }
+      },
+      {
+        "id": "batch-016",
+        "release_slot": 107,
+        "deadline_slot": 117,
+        "duration_hours": 6,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 107,
+            "end_slot": 113,
+            "cost_eur": 1.93989,
+            "carbon_kg": 6.643967353717952
+          },
+          "cheapest": {
+            "start_slot": 111,
+            "end_slot": 117,
+            "cost_eur": 2.0739300000000003,
+            "carbon_kg": 6.605881976047094
+          },
+          "greenest": {
+            "start_slot": 107,
+            "end_slot": 113,
+            "cost_eur": 1.93989,
+            "carbon_kg": 6.643967353717952
+          },
+          "oracle": {
+            "start_slot": 107,
+            "end_slot": 113,
+            "cost_eur": 1.93989,
+            "carbon_kg": 6.643967353717952
+          }
+        }
+      },
+      {
+        "id": "batch-017",
+        "release_slot": 47,
+        "deadline_slot": 67,
+        "duration_hours": 2,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 47,
+            "end_slot": 49,
+            "cost_eur": 0.1749804,
+            "carbon_kg": 0.9062199761513359
+          },
+          "cheapest": {
+            "start_slot": 50,
+            "end_slot": 52,
+            "cost_eur": 0.1674288,
+            "carbon_kg": 0.9192269861231389
+          },
+          "greenest": {
+            "start_slot": 47,
+            "end_slot": 49,
+            "cost_eur": 0.1749804,
+            "carbon_kg": 0.9062199761513359
+          },
+          "oracle": {
+            "start_slot": 50,
+            "end_slot": 52,
+            "cost_eur": 0.1674288,
+            "carbon_kg": 0.9192269861231389
+          }
+        }
+      },
+      {
+        "id": "batch-018",
+        "release_slot": 68,
+        "deadline_slot": 81,
+        "duration_hours": 1,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 68,
+            "end_slot": 69,
+            "cost_eur": 0.0602016,
+            "carbon_kg": 0.2773530968192242
+          },
+          "cheapest": {
+            "start_slot": 76,
+            "end_slot": 77,
+            "cost_eur": 0.0506784,
+            "carbon_kg": 0.2854126484695212
+          },
+          "greenest": {
+            "start_slot": 80,
+            "end_slot": 81,
+            "cost_eur": 0.061584,
+            "carbon_kg": 0.2539960667594886
+          },
+          "oracle": {
+            "start_slot": 75,
+            "end_slot": 76,
+            "cost_eur": 0.0494064,
+            "carbon_kg": 0.285312194185288
+          }
+        }
+      },
+      {
+        "id": "batch-019",
+        "release_slot": 18,
+        "deadline_slot": 32,
+        "duration_hours": 2,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 18,
+            "end_slot": 20,
+            "cost_eur": 0.1985256,
+            "carbon_kg": 0.7944581673249214
+          },
+          "cheapest": {
+            "start_slot": 26,
+            "end_slot": 28,
+            "cost_eur": 0.1516284,
+            "carbon_kg": 0.8643103272586234
+          },
+          "greenest": {
+            "start_slot": 29,
+            "end_slot": 31,
+            "cost_eur": 0.1777524,
+            "carbon_kg": 0.8804859681113127
+          },
+          "oracle": {
+            "start_slot": 26,
+            "end_slot": 28,
+            "cost_eur": 0.1516284,
+            "carbon_kg": 0.8643103272586234
+          }
+        }
+      },
+      {
+        "id": "batch-020",
+        "release_slot": 32,
+        "deadline_slot": 42,
+        "duration_hours": 2,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 32,
+            "end_slot": 34,
+            "cost_eur": 0.3611088,
+            "carbon_kg": 1.4724794268495927
+          },
+          "cheapest": {
+            "start_slot": 35,
+            "end_slot": 37,
+            "cost_eur": 0.3301116,
+            "carbon_kg": 1.3453241092698103
+          },
+          "greenest": {
+            "start_slot": 32,
+            "end_slot": 34,
+            "cost_eur": 0.3611088,
+            "carbon_kg": 1.4724794268495927
+          },
+          "oracle": {
+            "start_slot": 35,
+            "end_slot": 37,
+            "cost_eur": 0.3301116,
+            "carbon_kg": 1.3453241092698103
+          }
+        }
+      },
+      {
+        "id": "batch-021",
+        "release_slot": 63,
+        "deadline_slot": 69,
+        "duration_hours": 6,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 63,
+            "end_slot": 69,
+            "cost_eur": 2.58432,
+            "carbon_kg": 10.367309334697678
+          },
+          "cheapest": {
+            "start_slot": 63,
+            "end_slot": 69,
+            "cost_eur": 2.58432,
+            "carbon_kg": 10.367309334697678
+          },
+          "greenest": {
+            "start_slot": 63,
+            "end_slot": 69,
+            "cost_eur": 2.58432,
+            "carbon_kg": 10.367309334697678
+          },
+          "oracle": {
+            "start_slot": 63,
+            "end_slot": 69,
+            "cost_eur": 2.58432,
+            "carbon_kg": 10.367309334697678
+          }
+        }
+      },
+      {
+        "id": "batch-022",
+        "release_slot": 101,
+        "deadline_slot": 105,
+        "duration_hours": 4,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 101,
+            "end_slot": 105,
+            "cost_eur": 0.3575124,
+            "carbon_kg": 1.4783681560213766
+          },
+          "cheapest": {
+            "start_slot": 101,
+            "end_slot": 105,
+            "cost_eur": 0.3575124,
+            "carbon_kg": 1.4783681560213766
+          },
+          "greenest": {
+            "start_slot": 101,
+            "end_slot": 105,
+            "cost_eur": 0.3575124,
+            "carbon_kg": 1.4783681560213766
+          },
+          "oracle": {
+            "start_slot": 101,
+            "end_slot": 105,
+            "cost_eur": 0.3575124,
+            "carbon_kg": 1.4783681560213766
+          }
+        }
+      },
+      {
+        "id": "batch-023",
+        "release_slot": 120,
+        "deadline_slot": 134,
+        "duration_hours": 6,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 120,
+            "end_slot": 126,
+            "cost_eur": 1.2271500000000002,
+            "carbon_kg": 5.782041926666179
+          },
+          "cheapest": {
+            "start_slot": 120,
+            "end_slot": 126,
+            "cost_eur": 1.2271500000000002,
+            "carbon_kg": 5.782041926666179
+          },
+          "greenest": {
+            "start_slot": 120,
+            "end_slot": 126,
+            "cost_eur": 1.2271500000000002,
+            "carbon_kg": 5.782041926666179
+          },
+          "oracle": {
+            "start_slot": 120,
+            "end_slot": 126,
+            "cost_eur": 1.2271500000000002,
+            "carbon_kg": 5.782041926666179
+          }
+        }
+      },
+      {
+        "id": "batch-024",
+        "release_slot": 56,
+        "deadline_slot": 80,
+        "duration_hours": 6,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 56,
+            "end_slot": 62,
+            "cost_eur": 0.5842956,
+            "carbon_kg": 2.351047563759585
+          },
+          "cheapest": {
+            "start_slot": 72,
+            "end_slot": 78,
+            "cost_eur": 0.5467728000000001,
+            "carbon_kg": 2.991952381517838
+          },
+          "greenest": {
+            "start_slot": 74,
+            "end_slot": 80,
+            "cost_eur": 0.5681592,
+            "carbon_kg": 2.9695860806503362
+          },
+          "oracle": {
+            "start_slot": 72,
+            "end_slot": 78,
+            "cost_eur": 0.5467728000000001,
+            "carbon_kg": 2.991952381517838
+          }
+        }
+      },
+      {
+        "id": "batch-025",
+        "release_slot": 98,
+        "deadline_slot": 111,
+        "duration_hours": 1,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 98,
+            "end_slot": 99,
+            "cost_eur": 0.048816000000000005,
+            "carbon_kg": 0.22335160475145646
+          },
+          "cheapest": {
+            "start_slot": 98,
+            "end_slot": 99,
+            "cost_eur": 0.048816000000000005,
+            "carbon_kg": 0.22335160475145646
+          },
+          "greenest": {
+            "start_slot": 98,
+            "end_slot": 99,
+            "cost_eur": 0.048816000000000005,
+            "carbon_kg": 0.22335160475145646
+          },
+          "oracle": {
+            "start_slot": 99,
+            "end_slot": 100,
+            "cost_eur": 0.046910400000000005,
+            "carbon_kg": 0.22011879326016384
+          }
+        }
+      },
+      {
+        "id": "batch-026",
+        "release_slot": 28,
+        "deadline_slot": 52,
+        "duration_hours": 6,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 28,
+            "end_slot": 34,
+            "cost_eur": 0.3154992,
+            "carbon_kg": 1.4585879627328404
+          },
+          "cheapest": {
+            "start_slot": 46,
+            "end_slot": 52,
+            "cost_eur": 0.3003072,
+            "carbon_kg": 1.5614372985724974
+          },
+          "greenest": {
+            "start_slot": 28,
+            "end_slot": 34,
+            "cost_eur": 0.3154992,
+            "carbon_kg": 1.4585879627328404
+          },
+          "oracle": {
+            "start_slot": 46,
+            "end_slot": 52,
+            "cost_eur": 0.3003072,
+            "carbon_kg": 1.5614372985724974
+          }
+        }
+      },
+      {
+        "id": "batch-027",
+        "release_slot": 114,
+        "deadline_slot": 132,
+        "duration_hours": 6,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 114,
+            "end_slot": 120,
+            "cost_eur": 0.8558472,
+            "carbon_kg": 3.298361392608272
+          },
+          "cheapest": {
+            "start_slot": 119,
+            "end_slot": 125,
+            "cost_eur": 0.6390384,
+            "carbon_kg": 3.0080865156891994
+          },
+          "greenest": {
+            "start_slot": 118,
+            "end_slot": 124,
+            "cost_eur": 0.6428760000000001,
+            "carbon_kg": 3.0475222510782505
+          },
+          "oracle": {
+            "start_slot": 120,
+            "end_slot": 126,
+            "cost_eur": 0.6381180000000001,
+            "carbon_kg": 3.0066618018664135
+          }
+        }
+      },
+      {
+        "id": "batch-028",
+        "release_slot": 102,
+        "deadline_slot": 108,
+        "duration_hours": 2,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 102,
+            "end_slot": 104,
+            "cost_eur": 0.6384000000000001,
+            "carbon_kg": 2.6825404012742537
+          },
+          "cheapest": {
+            "start_slot": 102,
+            "end_slot": 104,
+            "cost_eur": 0.6384000000000001,
+            "carbon_kg": 2.6825404012742537
+          },
+          "greenest": {
+            "start_slot": 106,
+            "end_slot": 108,
+            "cost_eur": 0.60273,
+            "carbon_kg": 2.197126737376909
+          },
+          "oracle": {
+            "start_slot": 106,
+            "end_slot": 108,
+            "cost_eur": 0.60273,
+            "carbon_kg": 2.197126737376909
+          }
+        }
+      },
+      {
+        "id": "batch-029",
+        "release_slot": 66,
+        "deadline_slot": 78,
+        "duration_hours": 4,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 66,
+            "end_slot": 70,
+            "cost_eur": 0.82953,
+            "carbon_kg": 3.6115029626587907
+          },
+          "cheapest": {
+            "start_slot": 73,
+            "end_slot": 77,
+            "cost_eur": 0.6623448,
+            "carbon_kg": 3.707287982730237
+          },
+          "greenest": {
+            "start_slot": 74,
+            "end_slot": 78,
+            "cost_eur": 0.6616584,
+            "carbon_kg": 3.7062890928277765
+          },
+          "oracle": {
+            "start_slot": 74,
+            "end_slot": 78,
+            "cost_eur": 0.6616584,
+            "carbon_kg": 3.7062890928277765
+          }
+        }
+      },
+      {
+        "id": "batch-030",
+        "release_slot": 20,
+        "deadline_slot": 25,
+        "duration_hours": 1,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 20,
+            "end_slot": 21,
+            "cost_eur": 0.054244799999999996,
+            "carbon_kg": 0.23141710931207252
+          },
+          "cheapest": {
+            "start_slot": 24,
+            "end_slot": 25,
+            "cost_eur": 0.0456288,
+            "carbon_kg": 0.24476342149539
+          },
+          "greenest": {
+            "start_slot": 23,
+            "end_slot": 24,
+            "cost_eur": 0.049041600000000005,
+            "carbon_kg": 0.24361584328058183
+          },
+          "oracle": {
+            "start_slot": 24,
+            "end_slot": 25,
+            "cost_eur": 0.0456288,
+            "carbon_kg": 0.24476342149539
+          }
+        }
+      },
+      {
+        "id": "batch-031",
+        "release_slot": 96,
+        "deadline_slot": 110,
+        "duration_hours": 2,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 96,
+            "end_slot": 98,
+            "cost_eur": 0.186312,
+            "carbon_kg": 0.7983389358822748
+          },
+          "cheapest": {
+            "start_slot": 96,
+            "end_slot": 98,
+            "cost_eur": 0.186312,
+            "carbon_kg": 0.7983389358822748
+          },
+          "greenest": {
+            "start_slot": 97,
+            "end_slot": 99,
+            "cost_eur": 0.1759044,
+            "carbon_kg": 0.7856198156232171
+          },
+          "oracle": {
+            "start_slot": 99,
+            "end_slot": 101,
+            "cost_eur": 0.1649256,
+            "carbon_kg": 0.7649771370921562
+          }
+        }
+      },
+      {
+        "id": "batch-032",
+        "release_slot": 81,
+        "deadline_slot": 87,
+        "duration_hours": 6,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 81,
+            "end_slot": 87,
+            "cost_eur": 2.1326400000000003,
+            "carbon_kg": 8.489770982596292
+          },
+          "cheapest": {
+            "start_slot": 81,
+            "end_slot": 87,
+            "cost_eur": 2.1326400000000003,
+            "carbon_kg": 8.489770982596292
+          },
+          "greenest": {
+            "start_slot": 81,
+            "end_slot": 87,
+            "cost_eur": 2.1326400000000003,
+            "carbon_kg": 8.489770982596292
+          },
+          "oracle": {
+            "start_slot": 81,
+            "end_slot": 87,
+            "cost_eur": 2.1326400000000003,
+            "carbon_kg": 8.489770982596292
+          }
+        }
+      },
+      {
+        "id": "batch-033",
+        "release_slot": 92,
+        "deadline_slot": 104,
+        "duration_hours": 4,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 92,
+            "end_slot": 96,
+            "cost_eur": 0.7635732000000001,
+            "carbon_kg": 3.17067827282159
+          },
+          "cheapest": {
+            "start_slot": 96,
+            "end_slot": 100,
+            "cost_eur": 0.6571188000000001,
+            "carbon_kg": 2.923908245890562
+          },
+          "greenest": {
+            "start_slot": 92,
+            "end_slot": 96,
+            "cost_eur": 0.7635732000000001,
+            "carbon_kg": 3.17067827282159
+          },
+          "oracle": {
+            "start_slot": 98,
+            "end_slot": 102,
+            "cost_eur": 0.6180720000000001,
+            "carbon_kg": 2.853980286817751
+          }
+        }
+      },
+      {
+        "id": "batch-034",
+        "release_slot": 81,
+        "deadline_slot": 94,
+        "duration_hours": 1,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 81,
+            "end_slot": 82,
+            "cost_eur": 0.1031772,
+            "carbon_kg": 0.40170184925394925
+          },
+          "cheapest": {
+            "start_slot": 85,
+            "end_slot": 86,
+            "cost_eur": 0.0989772,
+            "carbon_kg": 0.4083170011290259
+          },
+          "greenest": {
+            "start_slot": 92,
+            "end_slot": 93,
+            "cost_eur": 0.105756,
+            "carbon_kg": 0.43464876566305455
+          },
+          "oracle": {
+            "start_slot": 83,
+            "end_slot": 84,
+            "cost_eur": 0.09153479999999999,
+            "carbon_kg": 0.36482855907124967
+          }
+        }
+      },
+      {
+        "id": "batch-035",
+        "release_slot": 4,
+        "deadline_slot": 12,
+        "duration_hours": 4,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 4,
+            "end_slot": 8,
+            "cost_eur": 0.28473479999999995,
+            "carbon_kg": 1.4419350344627637
+          },
+          "cheapest": {
+            "start_slot": 4,
+            "end_slot": 8,
+            "cost_eur": 0.28473479999999995,
+            "carbon_kg": 1.4419350344627637
+          },
+          "greenest": {
+            "start_slot": 8,
+            "end_slot": 12,
+            "cost_eur": 0.3189984,
+            "carbon_kg": 1.3121542144998715
+          },
+          "oracle": {
+            "start_slot": 4,
+            "end_slot": 8,
+            "cost_eur": 0.28473479999999995,
+            "carbon_kg": 1.4419350344627637
+          }
+        }
+      },
+      {
+        "id": "batch-036",
+        "release_slot": 31,
+        "deadline_slot": 41,
+        "duration_hours": 6,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 31,
+            "end_slot": 37,
+            "cost_eur": 0.5612879999999999,
+            "carbon_kg": 2.3207348918140784
+          },
+          "cheapest": {
+            "start_slot": 33,
+            "end_slot": 39,
+            "cost_eur": 0.5554584,
+            "carbon_kg": 2.3064440345827104
+          },
+          "greenest": {
+            "start_slot": 31,
+            "end_slot": 37,
+            "cost_eur": 0.5612879999999999,
+            "carbon_kg": 2.3207348918140784
+          },
+          "oracle": {
+            "start_slot": 32,
+            "end_slot": 38,
+            "cost_eur": 0.5533416,
+            "carbon_kg": 2.2780290706286865
+          }
+        }
+      },
+      {
+        "id": "batch-037",
+        "release_slot": 123,
+        "deadline_slot": 129,
+        "duration_hours": 6,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 123,
+            "end_slot": 129,
+            "cost_eur": 0.2211648,
+            "carbon_kg": 0.9483542360733938
+          },
+          "cheapest": {
+            "start_slot": 123,
+            "end_slot": 129,
+            "cost_eur": 0.2211648,
+            "carbon_kg": 0.9483542360733938
+          },
+          "greenest": {
+            "start_slot": 123,
+            "end_slot": 129,
+            "cost_eur": 0.2211648,
+            "carbon_kg": 0.9483542360733938
+          },
+          "oracle": {
+            "start_slot": 123,
+            "end_slot": 129,
+            "cost_eur": 0.2211648,
+            "carbon_kg": 0.9483542360733938
+          }
+        }
+      },
+      {
+        "id": "batch-038",
+        "release_slot": 8,
+        "deadline_slot": 32,
+        "duration_hours": 6,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 8,
+            "end_slot": 14,
+            "cost_eur": 0.4787663999999999,
+            "carbon_kg": 2.007941100458881
+          },
+          "cheapest": {
+            "start_slot": 23,
+            "end_slot": 29,
+            "cost_eur": 0.476658,
+            "carbon_kg": 2.5888441255538566
+          },
+          "greenest": {
+            "start_slot": 25,
+            "end_slot": 31,
+            "cost_eur": 0.48873720000000004,
+            "carbon_kg": 2.6146663803072183
+          },
+          "oracle": {
+            "start_slot": 24,
+            "end_slot": 30,
+            "cost_eur": 0.47399519999999995,
+            "carbon_kg": 2.6024475564094147
+          }
+        }
+      },
+      {
+        "id": "batch-039",
+        "release_slot": 42,
+        "deadline_slot": 56,
+        "duration_hours": 6,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 42,
+            "end_slot": 48,
+            "cost_eur": 1.1434176,
+            "carbon_kg": 5.040336640271066
+          },
+          "cheapest": {
+            "start_slot": 47,
+            "end_slot": 53,
+            "cost_eur": 0.9591816,
+            "carbon_kg": 5.093446010668062
+          },
+          "greenest": {
+            "start_slot": 43,
+            "end_slot": 49,
+            "cost_eur": 1.0900812,
+            "carbon_kg": 5.047666054734662
+          },
+          "oracle": {
+            "start_slot": 47,
+            "end_slot": 53,
+            "cost_eur": 0.9591816,
+            "carbon_kg": 5.093446010668062
+          }
+        }
+      },
+      {
+        "id": "batch-040",
+        "release_slot": 80,
+        "deadline_slot": 89,
+        "duration_hours": 1,
+        "gpus": 8,
+        "assumed_kw": 3.0,
+        "policies": {
+          "immediate": {
+            "start_slot": 80,
+            "end_slot": 81,
+            "cost_eur": 0.3849,
+            "carbon_kg": 1.5874754172468037
+          },
+          "cheapest": {
+            "start_slot": 85,
+            "end_slot": 86,
+            "cost_eur": 0.35349,
+            "carbon_kg": 1.4582750040322354
+          },
+          "greenest": {
+            "start_slot": 86,
+            "end_slot": 87,
+            "cost_eur": 0.41352,
+            "carbon_kg": 1.6147147909967847
+          },
+          "oracle": {
+            "start_slot": 83,
+            "end_slot": 84,
+            "cost_eur": 0.32691,
+            "carbon_kg": 1.3029591395401776
+          }
+        }
+      },
+      {
+        "id": "batch-041",
+        "release_slot": 96,
+        "deadline_slot": 110,
+        "duration_hours": 6,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 96,
+            "end_slot": 102,
+            "cost_eur": 0.51912,
+            "carbon_kg": 2.3350975518610637
+          },
+          "cheapest": {
+            "start_slot": 96,
+            "end_slot": 102,
+            "cost_eur": 0.51912,
+            "carbon_kg": 2.3350975518610637
+          },
+          "greenest": {
+            "start_slot": 96,
+            "end_slot": 102,
+            "cost_eur": 0.51912,
+            "carbon_kg": 2.3350975518610637
+          },
+          "oracle": {
+            "start_slot": 97,
+            "end_slot": 103,
+            "cost_eur": 0.5090399999999999,
+            "carbon_kg": 2.3135673120040607
+          }
+        }
+      },
+      {
+        "id": "batch-042",
+        "release_slot": 118,
+        "deadline_slot": 124,
+        "duration_hours": 2,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 118,
+            "end_slot": 120,
+            "cost_eur": 0.06881280000000001,
+            "carbon_kg": 0.3230245550574401
+          },
+          "cheapest": {
+            "start_slot": 122,
+            "end_slot": 124,
+            "cost_eur": 0.0631392,
+            "carbon_kg": 0.31121783032615374
+          },
+          "greenest": {
+            "start_slot": 120,
+            "end_slot": 122,
+            "cost_eur": 0.065856,
+            "carbon_kg": 0.3034567687943295
+          },
+          "oracle": {
+            "start_slot": 122,
+            "end_slot": 124,
+            "cost_eur": 0.0631392,
+            "carbon_kg": 0.31121783032615374
+          }
+        }
+      },
+      {
+        "id": "batch-043",
+        "release_slot": 3,
+        "deadline_slot": 5,
+        "duration_hours": 2,
+        "gpus": 1,
+        "assumed_kw": 0.48,
+        "policies": {
+          "immediate": {
+            "start_slot": 3,
+            "end_slot": 5,
+            "cost_eur": 0.075264,
+            "carbon_kg": 0.39838361018256535
+          },
+          "cheapest": {
+            "start_slot": 3,
+            "end_slot": 5,
+            "cost_eur": 0.075264,
+            "carbon_kg": 0.39838361018256535
+          },
+          "greenest": {
+            "start_slot": 3,
+            "end_slot": 5,
+            "cost_eur": 0.075264,
+            "carbon_kg": 0.39838361018256535
+          },
+          "oracle": {
+            "start_slot": 3,
+            "end_slot": 5,
+            "cost_eur": 0.075264,
+            "carbon_kg": 0.39838361018256535
+          }
+        }
+      },
+      {
+        "id": "batch-044",
+        "release_slot": 104,
+        "deadline_slot": 122,
+        "duration_hours": 6,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 104,
+            "end_slot": 110,
+            "cost_eur": 0.518952,
+            "carbon_kg": 1.898910903060251
+          },
+          "cheapest": {
+            "start_slot": 116,
+            "end_slot": 122,
+            "cost_eur": 0.38183040000000007,
+            "carbon_kg": 1.688967129613102
+          },
+          "greenest": {
+            "start_slot": 104,
+            "end_slot": 110,
+            "cost_eur": 0.518952,
+            "carbon_kg": 1.898910903060251
+          },
+          "oracle": {
+            "start_slot": 116,
+            "end_slot": 122,
+            "cost_eur": 0.38183040000000007,
+            "carbon_kg": 1.688967129613102
+          }
+        }
+      },
+      {
+        "id": "batch-045",
+        "release_slot": 23,
+        "deadline_slot": 45,
+        "duration_hours": 4,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 23,
+            "end_slot": 27,
+            "cost_eur": 0.5951088000000001,
+            "carbon_kg": 3.18787184225885
+          },
+          "cheapest": {
+            "start_slot": 24,
+            "end_slot": 28,
+            "cost_eur": 0.5774808,
+            "carbon_kg": 3.2007077791473355
+          },
+          "greenest": {
+            "start_slot": 27,
+            "end_slot": 31,
+            "cost_eur": 0.6202248,
+            "carbon_kg": 3.255169760262179
+          },
+          "oracle": {
+            "start_slot": 24,
+            "end_slot": 28,
+            "cost_eur": 0.5774808,
+            "carbon_kg": 3.2007077791473355
+          }
+        }
+      },
+      {
+        "id": "batch-046",
+        "release_slot": 22,
+        "deadline_slot": 36,
+        "duration_hours": 6,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 22,
+            "end_slot": 28,
+            "cost_eur": 0.9000888000000001,
+            "carbon_kg": 4.773656337683306
+          },
+          "cheapest": {
+            "start_slot": 23,
+            "end_slot": 29,
+            "cost_eur": 0.8852220000000001,
+            "carbon_kg": 4.807853376028591
+          },
+          "greenest": {
+            "start_slot": 25,
+            "end_slot": 31,
+            "cost_eur": 0.9076548000000001,
+            "carbon_kg": 4.855808991999121
+          },
+          "oracle": {
+            "start_slot": 24,
+            "end_slot": 30,
+            "cost_eur": 0.8802768,
+            "carbon_kg": 4.833116890474627
+          }
+        }
+      },
+      {
+        "id": "batch-047",
+        "release_slot": 64,
+        "deadline_slot": 66,
+        "duration_hours": 2,
+        "gpus": 2,
+        "assumed_kw": 0.84,
+        "policies": {
+          "immediate": {
+            "start_slot": 64,
+            "end_slot": 66,
+            "cost_eur": 0.260568,
+            "carbon_kg": 0.9626007198180067
+          },
+          "cheapest": {
+            "start_slot": 64,
+            "end_slot": 66,
+            "cost_eur": 0.260568,
+            "carbon_kg": 0.9626007198180067
+          },
+          "greenest": {
+            "start_slot": 64,
+            "end_slot": 66,
+            "cost_eur": 0.260568,
+            "carbon_kg": 0.9626007198180067
+          },
+          "oracle": {
+            "start_slot": 64,
+            "end_slot": 66,
+            "cost_eur": 0.260568,
+            "carbon_kg": 0.9626007198180067
+          }
+        }
+      },
+      {
+        "id": "batch-048",
+        "release_slot": 43,
+        "deadline_slot": 56,
+        "duration_hours": 1,
+        "gpus": 4,
+        "assumed_kw": 1.56,
+        "policies": {
+          "immediate": {
+            "start_slot": 43,
+            "end_slot": 44,
+            "cost_eur": 0.2014428,
+            "carbon_kg": 0.8378046887413824
+          },
+          "cheapest": {
+            "start_slot": 51,
+            "end_slot": 52,
+            "cost_eur": 0.1553448,
+            "carbon_kg": 0.8573986488247937
+          },
+          "greenest": {
+            "start_slot": 44,
+            "end_slot": 45,
+            "cost_eur": 0.188526,
+            "carbon_kg": 0.841635320682765
+          },
+          "oracle": {
+            "start_slot": 51,
+            "end_slot": 52,
+            "cost_eur": 0.1553448,
+            "carbon_kg": 0.8573986488247937
+          }
+        }
+      }
+    ],
+    "regret_eur_vs_hindsight": 0.44158560000000074,
+    "assumptions": "Independent jobs, unlimited capacity, constant GPU/host watts, no rental/idle/checkpoint fees; 1-hour evaluation slots. Predicted price decisions evaluated against actual holdout prices. Oracle is hindsight only."
+  }
+}

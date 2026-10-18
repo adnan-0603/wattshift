@@ -1,0 +1,473 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wattshift-data
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wattshift-settings
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+data:
+  DATA_MODE: live-snapshot
+  REGION: DE
+  TIMEZONE: Europe/Berlin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wattshift-api
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wattshift-api
+  template:
+    metadata:
+      labels:
+        app: wattshift-api
+        app.kubernetes.io/part-of: wattshift
+    spec:
+      containers:
+      - name: wattshift-api
+        image: wattshift/backend:1.0.0-rc4
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: '2'
+            memory: 1Gi
+        ports:
+        - containerPort: 8000
+        env:
+        - name: WATTSHIFT_DATA
+          value: /data
+        - name: WATTSHIFT_ALLOW_STALE_DEMO
+          value: '1'
+        volumeMounts: &id001
+        - name: data
+          mountPath: /data
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        envFrom:
+        - configMapRef:
+            name: wattshift-settings
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: wattshift-data
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      initContainers:
+      - name: seed
+        image: wattshift/backend:1.0.0-rc4
+        command:
+        - python
+        - -c
+        - from pathlib import Path; import shutil; p=Path('/data/console.json'); shutil.copyfile('/app/seed/console.json',p)
+          if not p.exists() else None
+        volumeMounts: *id001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wattshift-api
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  selector:
+    app: wattshift-api
+  ports:
+  - port: 8000
+    targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wattshift-console
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wattshift-console
+  template:
+    metadata:
+      labels:
+        app: wattshift-console
+        app.kubernetes.io/part-of: wattshift
+    spec:
+      containers:
+      - name: wattshift-console
+        image: wattshift/console:1.0.0-rc4
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: '2'
+            memory: 1Gi
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wattshift-console
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  selector:
+    app: wattshift-console
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: wattshift-ingest
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  schedule: 20 13 * * *
+  timeZone: Europe/Berlin
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 2400
+      template:
+        spec:
+          restartPolicy: OnFailure
+          securityContext:
+            runAsUser: 10001
+            fsGroup: 10001
+          containers:
+          - name: ingest
+            image: wattshift/backend:1.0.0-rc4
+            command:
+            - python
+            - -m
+            - wattshift.refresh
+            env:
+            - name: WATTSHIFT_DATA
+              value: /data
+            - name: WATTSHIFT_ALLOW_STALE_DEMO
+              value: '1'
+            volumeMounts:
+            - name: data
+              mountPath: /data
+            resources:
+              requests:
+                cpu: 250m
+                memory: 512Mi
+              limits:
+                cpu: '2'
+                memory: 2Gi
+          volumes:
+          - name: data
+            persistentVolumeClaim:
+              claimName: wattshift-data
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wattshift-controller
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: wattshift-controller
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+rules:
+- apiGroups:
+  - kueue.x-k8s.io
+  resources:
+  - workloads
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - kueue.x-k8s.io
+  resources:
+  - workloads/status
+  verbs:
+  - get
+  - patch
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: wattshift-controller
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+subjects:
+- kind: ServiceAccount
+  name: wattshift-controller
+  namespace: wattshift
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: wattshift-controller
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: wattshift-admissioncheck-status
+rules:
+- apiGroups:
+  - kueue.x-k8s.io
+  resources:
+  - admissionchecks
+  verbs:
+  - get
+- apiGroups:
+  - kueue.x-k8s.io
+  resources:
+  - admissionchecks/status
+  verbs:
+  - get
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: wattshift-admissioncheck-status
+subjects:
+- kind: ServiceAccount
+  name: wattshift-controller
+  namespace: wattshift
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: wattshift-admissioncheck-status
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wattshift-controller
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wattshift-controller
+  template:
+    metadata:
+      labels:
+        app: wattshift-controller
+        app.kubernetes.io/part-of: wattshift
+    spec:
+      containers:
+      - name: wattshift-controller
+        image: wattshift/backend:1.0.0-rc4
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: '2'
+            memory: 1Gi
+        command:
+        - python
+        - -m
+        - wattshift.controller
+        env:
+        - name: WATTSHIFT_DATA
+          value: /data
+        - name: WATTSHIFT_ALLOW_STALE_DEMO
+          value: '1'
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: wattshift-data
+      serviceAccountName: wattshift-controller
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wattshift-ingress
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: wattshift-ingress
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - services
+  - endpoints
+  - secrets
+  - nodes
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  - ingressclasses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses/status
+  verbs:
+  - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: wattshift-ingress
+subjects:
+- kind: ServiceAccount
+  name: wattshift-ingress
+  namespace: wattshift
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: wattshift-ingress
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wattshift-ingress
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wattshift-ingress
+  template:
+    metadata:
+      labels:
+        app: wattshift-ingress
+        app.kubernetes.io/part-of: wattshift
+    spec:
+      containers:
+      - name: wattshift-ingress
+        image: traefik:v3.6.2
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: '2'
+            memory: 1Gi
+        ports:
+        - containerPort: 8000
+          hostPort: 80
+        args:
+        - --providers.kubernetesingress=true
+        - --providers.kubernetesingress.ingressclass=wattshift
+        - --providers.kubernetesingress.namespaces=wattshift
+        - --entrypoints.web.address=:8000
+        - --log.level=INFO
+      serviceAccountName: wattshift-ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: wattshift
+spec:
+  controller: traefik.io/ingress-controller
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wattshift-console
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  ingressClassName: wattshift
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wattshift-console
+            port:
+              number: 80

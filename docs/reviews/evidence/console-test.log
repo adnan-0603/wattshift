@@ -1,0 +1,15 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> wattshift-console@1.0.0-rc.1 test:ui
+> vitest run src/app.test.tsx
+
+
+ RUN  v3.2.7 /workspace/scratch/a741968688d4/wattshift-platform/apps/console
+
+ ✓ src/app.test.tsx (1 test) 1222ms
+   ✓ Console workflows (DOM tests; not visual browser QA) > loads actual snapshot, visits all pages and updates calculator  1220ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  00:05:54
+   Duration  3.55s (transform 561ms, setup 0ms, collect 915ms, tests 1.22s, environment 872ms, prepare 146ms)

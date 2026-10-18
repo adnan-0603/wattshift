@@ -1,0 +1,9 @@
+.git
+.local
+.venv
+**/node_modules
+**/__pycache__
+legacy
+**/*.db*
+data/raw
+docs/assets/*.mp4

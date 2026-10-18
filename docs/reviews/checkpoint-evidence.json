@@ -1,0 +1,9 @@
+{
+  "execution": "real local CPU processes",
+  "stop_exit_code": 75,
+  "checkpoint_step_at_stop": 10,
+  "final_step": 100,
+  "resumed_matches_uninterrupted": true,
+  "final_digest": "20efaaccf2da10bc3beb91e1127d9e2736e68e1738a4c70c5e97e731c995563a",
+  "kubernetes_execution": false
+}

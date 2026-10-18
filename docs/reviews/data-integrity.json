@@ -1,0 +1,22 @@
+{
+  "data/live/provenance.json": {
+    "sha256_matches": true,
+    "rows": 7480
+  },
+  "data/historical/provenance.json": {
+    "sha256_matches": true,
+    "rows": 8784
+  },
+  "data/current-carbon/provenance.json": {
+    "sha256_matches": true,
+    "rows": 280
+  },
+  "data/winter/provenance.json": {
+    "sha256_matches": true,
+    "rows": 336
+  },
+  "data/summer/provenance.json": {
+    "sha256_matches": true,
+    "rows": 168
+  }
+}

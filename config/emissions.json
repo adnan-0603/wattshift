@@ -1,0 +1,26 @@
+{
+  "method": "production-weighted lifecycle proxy; illustrative technology factors, not marginal avoided emissions",
+  "unit": "gCO2e/kWh",
+  "boundary": "Domestic generation excluding pumped storage and imports. Other categories approximated. Includes lifecycle factors; not operational emissions. Coverage is reported.",
+  "source": "IPCC AR5 WGIII Annex III Table A.III.2 median lifecycle values; lignite approximated by coal, hydro/pumped storage boundary explicitly limited.",
+  "url": "https://www.ipcc.ch/site/assets/uploads/2018/02/ipcc_wg3_ar5_annex-iii.pdf",
+  "factors": {
+    "1223": 820,
+    "1224": 12,
+    "1225": 12,
+    "1226": 24,
+    "1227": 700,
+    "1228": 50,
+    "4066": 230,
+    "4067": 11,
+    "4068": 48,
+    "4069": 820,
+    "4071": 490
+  },
+  "approximations": {
+    "1223": "coal median proxy for lignite",
+    "1227": "explicit assumed mixed conventional",
+    "1228": "explicit assumed other renewables"
+  },
+  "structural_zero": "Nuclear missing values set to zero only from 2023-04-16 after German reactor shutdown; other missing categories stay unknown."
+}

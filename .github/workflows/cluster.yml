@@ -1,0 +1,26 @@
+name: Cluster acceptance
+on: [workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements.lock.txt pytest
+      - run: mkdir -p data/processed && cp apps/console/public/data/console.json data/processed/console.json
+      - name: Install pinned kind
+        run: |
+          curl --fail --location https://kind.sigs.k8s.io/dl/v0.31.0/kind-linux-amd64 -o /tmp/kind
+          chmod +x /tmp/kind
+          sudo mv /tmp/kind /usr/local/bin/kind
+      - run: make stack-lite
+      - run: python scripts/cluster_acceptance.py --lite
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: {name: cluster-evidence, path: '.local/*verified.json'}
+      - if: always()
+        run: make down

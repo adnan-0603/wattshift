@@ -1,0 +1,1 @@
+WattShift Console: React, Vite, TypeScript, ECharts and Tailwind. Run npm ci, npm test, npm run test:ui, npm run build. Default public mode reads public/data/console.json. VITE_MODE=cluster reads /api via nginx or Vite proxy. Five pages: Today, Forecast, Jobs, Savings, Calculator. See ../../docs/RUNBOOK.md.

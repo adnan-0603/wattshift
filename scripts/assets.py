@@ -1,0 +1,49 @@
+"""Scientific showcase figures from saved observations and executed simulation."""
+from pathlib import Path
+import json
+import pandas as pd
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation,PillowWriter
+from matplotlib.patches import FancyBboxPatch
+root=Path(__file__).resolve().parents[1];out=root/'docs/assets';out.mkdir(exist_ok=True,parents=True)
+plt.rcParams.update({'font.family':'DejaVu Sans','text.color':'#26384c','axes.labelcolor':'#26384c','axes.spines.top':False,'axes.spines.right':False,'axes.titleweight':'bold','figure.facecolor':'#fafbfc','axes.facecolor':'#fafbfc','font.size':12})
+slate='#26384c';amber='#e8a329';s=json.loads((root/'data/processed/console.json').read_text())
+f=pd.read_csv(root/'data/summer/prices.csv',parse_dates=['start_utc']);t=pd.to_datetime(f.start_utc,utc=True).dt.tz_convert('Europe/Berlin');day=f[t.dt.strftime('%Y-%m-%d')=='2024-06-03'].reset_index(drop=True)
+x=np.arange(len(day));price=day.price_eur_mwh.to_numpy();carbon=day.carbon_g_kwh.to_numpy();best=min(range(len(day)-3),key=lambda i:price[i:i+4].sum());base=0;kw=1.56
+fig,ax=plt.subplots(figsize=(12,6.75));fig.subplots_adjust(bottom=.18,top=.76,right=.88);ax.plot(x,price,color=slate,lw=3);ax.axhline(0,color='#bdc5ce',lw=1);ax.set(xlabel='Hour · Europe/Berlin',ylabel='Wholesale price · €/MWh',xlim=(0,24));ax2=ax.twinx();ax2.plot(x,carbon,color=amber,ls='--',lw=2);ax2.set_ylabel('Lifecycle carbon proxy · gCO₂e/kWh');fig.text(.08,.91,'WattShift / Duck & Job',fontsize=25,weight='bold');fig.text(.08,.855,'Actual German price curve · 3 June 2024 · four-hour job released at 00:00',fontsize=13);fig.text(.08,.055,'SMARD / Bundesnetzagentur · CC BY 4.0 | Carbon: domestic generation proxy\nRetrospective window choice. Same-day evening jobs cannot travel back to noon.',fontsize=10)
+span=ax.axvspan(base,base+4,color=amber,alpha=.22);label=fig.text(.08,.79,'',fontsize=14,weight='bold')
+def draw(frame):
+ global span
+ p=min(1,max(0,(frame-4)/23));start=round(base+(best-base)*p);span.remove();span=ax.axvspan(start,start+4,color=amber,alpha=.25)
+ c=float(price[start:start+4].sum()*kw/1000);co=float(carbon[start:start+4].sum()*kw/1000)
+ label.set_text(f'4 assumed GPUs · {start:02d}:00–{start+4:02d}:00  |  €{c:.3f} energy  |  {co:.2f} kgCO₂e estimated')
+ return label,span
+ani=FuncAnimation(fig,draw,frames=36,interval=130);ani.save(out/'duck-job.gif',writer=PillowWriter(fps=8),dpi=85);draw(35);fig.savefig(out/'price-carbon.png',dpi=120);plt.close(fig)
+names=['immediate','cheapest','greenest'];tot=s['simulation']['totals'];fig,ax=plt.subplots(figsize=(12,6.75));fig.subplots_adjust(top=.76,bottom=.2);values=[tot[n]['cost_eur'] for n in names];bars=ax.bar(['Run immediately','Cheapest forecast','Greenest lag proxy'],values,color=[slate,amber,'#8b9caf'],width=.55);ax.bar_label(bars,labels=[f'€{v:.2f}' for v in values],padding=10,fontsize=18);ax.set_ylim(0,max(values)*1.23);ax.set_ylabel('Simulated wholesale energy cost · €');fig.text(.09,.91,'7.78% lower energy cost',fontsize=30,weight='bold');fig.text(.09,.85,'48 independent jobs · 25–31 December 2024 UTC · forecast-based decisions',fontsize=13);fig.text(.09,.07,'Same trace, seed 42. Assumed power. Unlimited capacity. Not a cloud rental bill.\nCheapest: −0.223 kgCO₂e; greenest proxy: +0.325 kgCO₂e versus immediate.',fontsize=11);fig.savefig(out/'comparison.png',dpi=120);plt.close(fig)
+# Architecture remains a topology drawing, never a deployment screenshot.
+fig,ax=plt.subplots(figsize=(12,6.75));ax.set_xlim(0,12);ax.set_ylim(0,7);ax.axis('off');fig.text(.08,.92,'WattShift / The platform',fontsize=28,weight='bold');fig.text(.08,.865,'Source implementation · live Kubernetes acceptance still required',fontsize=13)
+boxes={'SMARD':(0.3,4.3),'Ingest / PVC':(3.2,4.3),'Forecast API':(6.1,4.3),'Kueue control':(9,4.3),'Console':(3.2,1.5),'Prometheus':(6.1,1.5),'Grafana':(9,1.5)}
+for label,(x,y) in boxes.items():
+ ax.add_patch(FancyBboxPatch((x,y),2.4,1,boxstyle='round,pad=.1',facecolor=amber if label=='Console' else slate,edgecolor='none'));ax.text(x+1.2,y+.5,label,ha='center',va='center',color=slate if label=='Console' else 'white',fontsize=13)
+for a,b in [('SMARD','Ingest / PVC'),('Ingest / PVC','Forecast API'),('Forecast API','Kueue control'),('Forecast API','Console'),('Forecast API','Prometheus'),('Prometheus','Grafana')]:
+ x,y=boxes[a];xx,yy=boxes[b];ax.annotate('',xy=(xx if yy==y else xx+1.2,yy+.5 if yy==y else yy+1.1),xytext=(x+2.5 if yy==y else x+1.2,y+.5 if yy==y else y-.1),arrowprops={'arrowstyle':'->','color':slate,'lw':2})
+fig.text(.08,.07,'Kubernetes: kind · CronJob · Deployment · Service · Ingress · PVC\nController sets Workload.active. Kueue owns Job suspension. CPU worker checkpoints progress.',fontsize=11);fig.savefig(out/'architecture.png',dpi=120);fig.savefig(out/'architecture.svg');plt.close(fig)
+# Minimal reproducible educational notebook (outputs generated by execution separately).
+cells=[]
+def md(t):cells.append({'cell_type':'markdown','metadata':{},'source':t.splitlines(True),'id':f'cell-{len(cells)}'})
+def code(t):cells.append({'cell_type':'code','metadata':{},'source':t.splitlines(True),'outputs':[],'execution_count':None,'id':f'cell-{len(cells)}'})
+md('# WattShift: understand the data\nReal SMARD observations, not sample prices. Historical hourly data remains hourly; recent quarter-hour data retains 15-minute bounds.\n\nMW is power; MWh is energy. Energy (kWh) = power (kW) × duration (hours). Cost (€) = kWh × €/MWh ÷ 1000. Carbon (kgCO₂e) = kWh × gCO₂e/kWh ÷ 1000. Day-ahead prices are known only after publication. A price trough is not technically the net-load duck curve.')
+code("from pathlib import Path\nimport pandas as pd\nroot=Path.cwd()\nif root.name=='notebooks': root=root.parent\npd.read_csv(root/'data/historical/prices.csv').head()")
+md('## Carbon boundary\nGeneration is MWh per source interval. Compute a generation-weighted lifecycle estimate using config/emissions.json. Imports and pumped storage are excluded; other fuels use explicit approximations. This is not marginal avoided emissions. Missing categories stay unknown; nuclear is structurally zero after German shutdown. Carbon coverage is intentionally incomplete.')
+code("import json\nprint(json.loads((root/'data/summer/provenance.json').read_text()))\nfrom IPython.display import Image,display\ndisplay(Image(filename=str(root/'docs/assets/price-carbon.png')))")
+md('## Forecast versus hindsight\nTraining ends before the held-out week. Lagged features use only previous observations. Revised historical data does not establish publication-time vintages. The calculator has perfect hindsight; the headline simulator uses a price forecast and lag-week carbon proxy. Negative energy prices do not imply negative retail or cloud bills.')
+code("report=json.loads((root/'apps/console/public/data/console.json').read_text())\npd.DataFrame(report['simulation']['totals']).T")
+(root/'notebooks').mkdir(exist_ok=True);(root/'notebooks/01-understand-energy.ipynb').write_text(json.dumps({'nbformat':4,'nbformat_minor':5,'metadata':{'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'}},'cells':cells},indent=2))
+print('Generated GIF, price/carbon, comparison, architecture and educational notebook.')
+
+# Annual price overview, using UTC calendar-year boundaries.
+annual=pd.read_csv(root/'data/historical/prices.csv');times=pd.to_datetime(annual.start_utc,utc=True);values=annual.price_eur_mwh
+fig,ax=plt.subplots(figsize=(12,5));ax.plot(times,values,lw=.4,color=slate);ax.scatter(times[values<0],values[values<0],s=2,color=amber);ax.axhline(0,color='#aab3be',lw=.7);ax.set_title(f'Germany / DE-LU 2024 · {int((values<0).sum())} negative-price UTC hours',loc='left',fontsize=18,pad=20);ax.set_ylabel('Wholesale price · €/MWh');fig.text(.1,.025,'SMARD / Bundesnetzagentur · CC BY 4.0 · Native hourly observations · retrospective retrieval',fontsize=9);fig.tight_layout(rect=(0,.06,1,1));fig.savefig(out/'2024-prices.png',dpi=120);plt.close(fig)

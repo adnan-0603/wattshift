@@ -1,0 +1,1 @@
+wattshift-prototype.zip preserves the earlier prototype and nested cleaned university archive unchanged. SHA256SUMS records its hash. This ZIP is included in the deliverable but excluded from Git history; copy it from the deliverable after cloning the bundled source history if wanted.

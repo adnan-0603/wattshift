@@ -1,0 +1,1 @@
+Python service implementation lives in ../wattshift: ingest, forecast, api, policies/simulator, controller, worker, gpu and refresh/export. One backend image provides separate process roles. See ../docs/RUNBOOK.md.

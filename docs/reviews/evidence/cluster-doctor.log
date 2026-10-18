@@ -1,0 +1,1 @@
+WattShift setup failed: Missing tools: docker, kind, kubectl. See docs/PHASE_0.md.

@@ -1,0 +1,1 @@
+Prometheus metrics are exposed by wattshift/api.py; Grafana panels are provisioned from grafana-dashboard.json through infra/kubernetes/observability.yaml. All watts/savings labels distinguish assumed/simulated values. Live scrape and screenshot remain unverified; see docs/RUNBOOK.md.

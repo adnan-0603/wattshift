@@ -1,0 +1,46 @@
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: AdmissionCheck
+metadata:
+  name: wattshift-forecast
+spec:
+  controllerName: wattshift.dev/forecast-admission
+---
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: ResourceFlavor
+metadata:
+  name: wattshift-cpu
+spec:
+  nodeLabels:
+    kubernetes.io/os: linux
+---
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: ClusterQueue
+metadata:
+  name: wattshift-cpu
+spec:
+  namespaceSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: wattshift
+  admissionChecks:
+  - wattshift-forecast
+  resourceGroups:
+  - coveredResources:
+    - cpu
+    - memory
+    flavors:
+    - name: wattshift-cpu
+      resources:
+      - name: cpu
+        nominalQuota: '1'
+      - name: memory
+        nominalQuota: 1Gi
+---
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: LocalQueue
+metadata:
+  name: wattshift
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  clusterQueue: wattshift-cpu

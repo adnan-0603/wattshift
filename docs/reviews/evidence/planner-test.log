@@ -1,0 +1,18 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> wattshift-console@1.0.0-rc.1 test
+> node --experimental-strip-types --test src/planner.test.ts
+
+✔ cost units, optimal window and no invented carbon (1.209222ms)
+✔ cannot cross data gap (0.362399ms)
+✔ deadline infeasible (0.181986ms)
+✔ overlap rejected (0.89498ms)
+✔ carbon requires coverage (0.330778ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 497.518375

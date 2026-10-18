@@ -1,0 +1,182 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wattshift-prometheus
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+data:
+  prometheus.yml: "global:\n  scrape_interval: 15s\nscrape_configs:\n- job_name: wattshift\n\
+    \  static_configs:\n  - targets:\n    - wattshift-api:8000\n- job_name: prometheus\n\
+    \  static_configs:\n  - targets:\n    - localhost:9090\n"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wattshift-grafana
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+data:
+  datasources.yaml: "apiVersion: 1\ndatasources:\n- access: proxy\n  isDefault: true\n\
+    \  name: Prometheus\n  type: prometheus\n  uid: wattshift-prometheus\n  url: http://wattshift-prometheus:9090\n"
+  dashboards.yaml: "apiVersion: 1\nproviders:\n- name: wattshift\n  options:\n   \
+    \ path: /var/lib/grafana/dashboards\n"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wattshift-dashboard
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+data:
+  wattshift.json: '{"uid": "wattshift", "title": "WattShift \u2014 estimates and operations",
+    "schemaVersion": 39, "version": 1, "refresh": "15s", "time": {"from": "now-1h",
+    "to": "now"}, "panels": [{"id": 1, "type": "timeseries", "title": "Market price
+    \u00b7 current interval", "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8}, "datasource":
+    {"type": "prometheus", "uid": "wattshift-prometheus"}, "targets": [{"expr": "wattshift_price_eur_mwh",
+    "refId": "A"}], "fieldConfig": {"defaults": {"unit": "currencyEUR"}, "overrides":
+    []}}, {"id": 2, "type": "timeseries", "title": "Carbon \u00b7 domestic estimate",
+    "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8}, "datasource": {"type": "prometheus",
+    "uid": "wattshift-prometheus"}, "targets": [{"expr": "wattshift_carbon_estimate_g_kwh",
+    "refId": "A"}], "fieldConfig": {"defaults": {"unit": "suffix:gCO\u2082e/kWh"},
+    "overrides": []}}, {"id": 3, "type": "timeseries", "title": "Power \u00b7 ASSUMED,
+    not GPU measured", "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8}, "datasource":
+    {"type": "prometheus", "uid": "wattshift-prometheus"}, "targets": [{"expr": "wattshift_assumed_job_power_watts",
+    "refId": "A"}], "fieldConfig": {"defaults": {"unit": "watt"}, "overrides": []}},
+    {"id": 4, "type": "timeseries", "title": "Savings \u00b7 simulated energy only",
+    "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8}, "datasource": {"type": "prometheus",
+    "uid": "wattshift-prometheus"}, "targets": [{"expr": "wattshift_simulated_savings_eur",
+    "refId": "A"}], "fieldConfig": {"defaults": {"unit": "currencyEUR"}, "overrides":
+    []}}, {"id": 5, "type": "timeseries", "title": "Data age", "gridPos": {"x": 0,
+    "y": 16, "w": 12, "h": 8}, "datasource": {"type": "prometheus", "uid": "wattshift-prometheus"},
+    "targets": [{"expr": "wattshift_data_age_seconds", "refId": "A"}], "fieldConfig":
+    {"defaults": {"unit": "s"}, "overrides": []}}, {"id": 6, "type": "timeseries",
+    "title": "API request rate", "gridPos": {"x": 12, "y": 16, "w": 12, "h": 8}, "datasource":
+    {"type": "prometheus", "uid": "wattshift-prometheus"}, "targets": [{"expr": "sum(rate(wattshift_api_requests_total[5m]))",
+    "refId": "A"}], "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []}}]}'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wattshift-prometheus
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wattshift-prometheus
+  template:
+    metadata:
+      labels:
+        app: wattshift-prometheus
+        app.kubernetes.io/part-of: wattshift
+    spec:
+      containers:
+      - name: wattshift-prometheus
+        image: prom/prometheus:v3.15.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: '2'
+            memory: 1Gi
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: config
+          mountPath: /etc/prometheus
+        args:
+        - --config.file=/etc/prometheus/prometheus.yml
+        - --storage.tsdb.retention.time=2d
+      volumes:
+      - name: config
+        configMap:
+          name: wattshift-prometheus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wattshift-prometheus
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  selector:
+    app: wattshift-prometheus
+  ports:
+  - port: 9090
+    targetPort: 9090
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wattshift-grafana
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wattshift-grafana
+  template:
+    metadata:
+      labels:
+        app: wattshift-grafana
+        app.kubernetes.io/part-of: wattshift
+    spec:
+      containers:
+      - name: wattshift-grafana
+        image: grafana/grafana:12.1.1
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: '2'
+            memory: 1Gi
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: grafana-admin
+              key: password
+        volumeMounts:
+        - name: provision
+          mountPath: /etc/grafana/provisioning/datasources/datasources.yaml
+          subPath: datasources.yaml
+        - name: provision
+          mountPath: /etc/grafana/provisioning/dashboards/dashboards.yaml
+          subPath: dashboards.yaml
+        - name: dashboards
+          mountPath: /var/lib/grafana/dashboards
+      volumes:
+      - name: provision
+        configMap:
+          name: wattshift-grafana
+      - name: dashboards
+        configMap:
+          name: wattshift-dashboard
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wattshift-grafana
+  namespace: wattshift
+  labels:
+    app.kubernetes.io/part-of: wattshift
+spec:
+  selector:
+    app: wattshift-grafana
+  ports:
+  - port: 3000
+    targetPort: 3000
