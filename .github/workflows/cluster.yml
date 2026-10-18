@@ -18,9 +18,11 @@ jobs:
           chmod +x /tmp/kind
           sudo mv /tmp/kind /usr/local/bin/kind
       - run: make stack-lite
-      - run: python scripts/cluster_acceptance.py --lite
+      - run: python scripts/cluster_acceptance.py --lite      
       - if: always()
         uses: actions/upload-artifact@v4
-        with: {name: cluster-evidence, path: '.local/*verified.json'}
-      - if: always()
-        run: make down
+        with:
+          name: cluster-evidence
+          path: .local/cluster-acceptance-verified.json
+          include-hidden-files: true
+          if-no-files-found: error
