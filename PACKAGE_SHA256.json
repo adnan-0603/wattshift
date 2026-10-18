@@ -1,6 +1,6 @@
 {
   "version": "1.0.0rc4-github",
-  "file_count": 130,
+  "file_count": 131,
   "files": {
     ".dockerignore": "ea8637df525cf93f6033906a1945600b6d4b7bf8a8e51c13604ea315dce8f0d2",
     ".github/workflows-disabled/daily.yml": "7e9dc6ea8647e2e89e92789a62d60fe3fb9350389160c2df44b394f3bc6b562b",
@@ -107,7 +107,7 @@
     "scripts/cluster.py": "8132d535d425e60c8339795472dd8873818abcd4eadb252aff77b273f8cc23e2",
     "scripts/cluster_acceptance.py": "042c4a6515ab0814875cc0733c70adc9d1a85fc1f42298ff3936d2b2f59531a4",
     "scripts/demo_jobs.py": "55258c0b5db4eda97a8f58b5786e76fa4cc0778c8f476f0ad9b495242d6664a2",
-    "scripts/deploy.py": "cdf1b874a269b9376a1c1411f741a90217a7b5b37eca98365ae8b94a664fa5ab",
+    "scripts/deploy.py": "c0ed5bb36a5b1088e3d9195d19c429b8dd4d900308f195e38d236cd518859c52",
     "scripts/power_cap_compare.py": "ff392663a4d9325f3c9c424bae433731af2e07a36e7a673a1e4f36e6172d1ca3",
     "scripts/release.py": "aa0df561b9a779d19c808c2063b3e34a3a8f30d1850bc17be1e9e78c6678e02e",
     "scripts/render_infra.py": "4a201faf506288ef6ea6d889dd8fd4ee7fc4dcab9bc1d44614917c5d3e940cbf",
@@ -131,6 +131,7 @@
     "wattshift/refresh.py": "755885f98277838c344e02e0ec13c6ae46e2584741f6b2108b761e0f556ae144",
     "wattshift/scheduling.py": "154d92c62c3ab2151368fc51116c908e51a045e54678524d33513ed57cb30e17",
     "wattshift/simulator.py": "224004ad94202066d91998cf3b9f03512577fd3b3d5bddecc5ba7a8b31c30d3d",
-    "wattshift/worker.py": "42329ab552c1d0a78b3e89a172d07fbbfd7170a06263cc626ee6050942847fe5"
+    "wattshift/worker.py": "42329ab552c1d0a78b3e89a172d07fbbfd7170a06263cc626ee6050942847fe5",
+    "tests/test_kueue_webhook_retry.py": "f32865301917d4f5104646eb662f186937d2d2f14d0e3f38d8130b07e3ead733"
   }
 }

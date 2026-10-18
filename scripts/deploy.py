@@ -6,6 +6,42 @@ import cluster
 ROOT=Path(__file__).resolve().parents[1]
 
 def run(args,input=None):subprocess.run(args,input=input,text=True,check=True,cwd=ROOT)
+def kueue_webhook_diagnostics():
+    """Log only non-secret readiness data when Kueue queue admission fails."""
+    for args in (
+        ('get', 'pods', '-o', 'wide'),
+        ('get', 'service', 'kueue-webhook-service', '-o', 'wide'),
+        ('get', 'endpoints', 'kueue-webhook-service', '-o', 'wide'),
+        ('get', 'endpointslices', '-l', 'kubernetes.io/service-name=kueue-webhook-service', '-o', 'wide'),
+    ):
+        subprocess.run(cluster.kubectl('-n', 'kueue-system', *args), cwd=ROOT, check=False)
+
+
+def apply_kueue_queues(max_attempts=8, delay_seconds=5):
+    """Retry only transient Kueue webhook network startup errors."""
+    args=cluster.kubectl('apply', '-f', str(ROOT/'infra/kubernetes/queues.yaml'))
+    for attempt in range(1, max_attempts+1):
+        result=subprocess.run(args, cwd=ROOT, capture_output=True, text=True)
+        if result.stdout:
+            print(result.stdout, end='', flush=True)
+        if result.stderr:
+            print(result.stderr, end='', file=sys.stderr, flush=True)
+        if result.returncode==0:
+            return
+        detail=result.stderr.lower()
+        transient=('failed calling webhook' in detail and
+                   any(term in detail for term in (
+                       'connect: connection refused',
+                       'no endpoints available for service',
+                       'connection reset by peer',
+                   )))
+        if not transient or attempt==max_attempts:
+            kueue_webhook_diagnostics()
+            raise subprocess.CalledProcessError(result.returncode, args)
+        print(f'Kueue webhook not reachable yet: retry {attempt}/{max_attempts} in {delay_seconds}s', flush=True)
+        time.sleep(delay_seconds)
+
+
 def up(lite=False):
     cluster.up()
     run(['docker','build','-t','wattshift/backend:1.0.0-rc4','.'])
@@ -18,7 +54,8 @@ def up(lite=False):
     if result.returncode:
         secret={'apiVersion':'v1','kind':'Secret','metadata':{'name':'grafana-admin','namespace':'wattshift'},'type':'Opaque','data':{'password':base64.b64encode(secrets.token_urlsafe(24).encode()).decode()}}
         run(cluster.kubectl('apply','-f','-'),json.dumps(secret))
-    files=['queues.yaml','platform.yaml'] + ([] if lite else ['observability.yaml'])
+    apply_kueue_queues()
+    files=['platform.yaml'] + ([] if lite else ['observability.yaml'])
     for file in files:
         run(cluster.kubectl('apply','-f',str(ROOT/'infra/kubernetes'/file)))
     verify(lite=lite)
