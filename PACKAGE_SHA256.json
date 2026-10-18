@@ -6,7 +6,7 @@
     ".github/workflows-disabled/daily.yml": "7e9dc6ea8647e2e89e92789a62d60fe3fb9350389160c2df44b394f3bc6b562b",
     ".github/workflows-disabled/pages.yml": "0f0f4f2e6aa5a01f848647abfa41444f9f1ccfc65f1822ab160be067d0304ffd",
     ".github/workflows/ci.yml": "4ff247ae1b65d803c8159e702315c54ab113779da7ae2aff9bf4ab78d650f4b7",
-    ".github/workflows/cluster.yml": "05ad8ba05df06069f3769d0c84fce72140f5268e0879870aec2cc184e8333f74",
+    ".github/workflows/cluster.yml": "c46b13cf674b682da4c816e0e8226ed3a532fb6f3d5f5e149e2114f8edcd038d",
     ".gitignore": "edb859c39ca3c7d9ccd479055a330186d99d50e70a590676cdb0ee579fe38650",
     "Dockerfile": "8eba10e7926fecac39bba631e6cefeb5ef11dd26a822b2fc735f0343abdeff21",
     "Makefile": "879484c8c9acad25b77f3c1b2eeb2cae0af053b80698f407bcf4cb9d887bd5cd",
