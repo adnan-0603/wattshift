@@ -130,7 +130,7 @@ def test_clusterqueue_admission_check_and_scoped_rbac():
     queue=list(yaml.safe_load_all((root/'infra/kubernetes/queues.yaml').read_text()))
     cluster=next(x for x in queue if x['kind']=='ClusterQueue')
     check=next(x for x in queue if x['kind']=='AdmissionCheck')
-    assert cluster['spec']['admissionChecks']==[CHECK_NAME]
+    assert cluster['spec']['admissionChecksStrategy']['admissionChecks']==[{'name':CHECK_NAME}]
     assert check['spec']['controllerName']==CHECK_CONTROLLER
     platform=list(yaml.safe_load_all((root/'infra/kubernetes/platform.yaml').read_text()))
     role=next(x for x in platform if x['kind']=='Role' and x['metadata']['name']=='wattshift-controller')

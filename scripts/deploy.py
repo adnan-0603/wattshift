@@ -33,7 +33,7 @@ def gate_active():
               'wattshift-cpu','-o','json'),text=True))
     if check.get('spec',{}).get('controllerName') != 'wattshift.dev/forecast-admission':
         return False
-    if 'wattshift-forecast' not in clusterqueue.get('spec',{}).get('admissionChecks',[]):
+    if not any(item.get('name') == 'wattshift-forecast' for item in clusterqueue.get('spec',{}).get('admissionChecksStrategy',{}).get('admissionChecks', [])):
         return False
     if not any(c.get('type')=='Active' and c.get('status')=='True' for c in check.get('status',{}).get('conditions',[])):
         return False

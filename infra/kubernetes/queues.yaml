@@ -21,8 +21,9 @@ spec:
   namespaceSelector:
     matchLabels:
       app.kubernetes.io/part-of: wattshift
-  admissionChecks:
-  - wattshift-forecast
+  admissionChecksStrategy:
+    admissionChecks:
+    - name: wattshift-forecast
   resourceGroups:
   - coveredResources:
     - cpu
